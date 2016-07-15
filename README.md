@@ -5,6 +5,7 @@ stream-wormhole
 [![build status][travis-image]][travis-url]
 [![Test coverage][codecov-image]][codecov-url]
 [![David deps][david-image]][david-url]
+[![Known Vulnerabilities][snyk-image]][snyk-url]
 [![npm download][download-image]][download-url]
 
 [npm-image]: https://img.shields.io/npm/v/stream-wormhole.svg?style=flat-square
@@ -17,6 +18,8 @@ stream-wormhole
 [david-url]: https://david-dm.org/node-modules/stream-wormhole
 [download-image]: https://img.shields.io/npm/dm/stream-wormhole.svg?style=flat-square
 [download-url]: https://npmjs.org/package/stream-wormhole
+[snyk-image]: https://snyk.io/test/npm/stream-wormhole/badge.svg?style=flat-square
+[snyk-url]: https://snyk.io/test/npm/stream-wormhole
 
 Pipe ReadStream to a wormhole.
 
@@ -28,7 +31,12 @@ const fs = require('fs');
 
 const readStream = fs.createReadStream(__filename);
 
-sendToWormhole(readStream)
+// ignore all error by default
+sendToWormhole(readStream, true)
+  .then(() => console.log('done'));
+
+// throw error
+sendToWormhole(readStream, true)
   .then(() => console.log('done'))
   .catch(err => console.error(err));
 ```

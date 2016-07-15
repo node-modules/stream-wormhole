@@ -2,7 +2,7 @@
 
 const BlackHoleStream = require('black-hole-stream');
 
-module.exports = stream => {
+module.exports = (stream, throwError) => {
   return new Promise((resolve, reject) => {
     if (stream._readableState && stream._readableState.ended) {
       return resolve();
@@ -27,7 +27,12 @@ module.exports = stream => {
 
     function onError(err) {
       cleanup();
-      reject(err);
+      // don't throw error by default
+      if (throwError) {
+        reject(err);
+      } else {
+        resolve();
+      }
     }
 
     stream.on('end', onEnd);

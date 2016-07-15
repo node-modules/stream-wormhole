@@ -11,9 +11,14 @@ describe('index.test.js', () => {
     return sendToWormhole(stream);
   });
 
-  it('should work when stream error', done => {
+  it('should not throw error by default when stream error', () => {
     const stream = fs.createReadStream(__filename + '-not-exists');
-    sendToWormhole(stream).catch(err => {
+    return sendToWormhole(stream);
+  });
+
+  it('should throw error when stream error', done => {
+    const stream = fs.createReadStream(__filename + '-not-exists');
+    sendToWormhole(stream, true).catch(err => {
       assert.equal(err.code, 'ENOENT');
       done();
     });
