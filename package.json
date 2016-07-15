@@ -12,10 +12,11 @@
     "lint": "eslint *.js test",
     "ci": "npm run lint && npm run test-cov"
   },
-  "dependencies": {},
+  "dependencies": {
+    "black-hole-stream": "~0.0.1"
+  },
   "devDependencies": {
     "autod": "*",
-    "black-hole-stream": "^0.0.1",
     "egg-ci": "^1.0.2",
     "eslint": "3",
     "eslint-config-egg": "3",
