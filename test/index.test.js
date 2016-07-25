@@ -2,7 +2,6 @@
 
 const assert = require('assert');
 const fs = require('fs');
-const BlackHoleStream = require('black-hole-stream');
 const sendToWormhole = require('..');
 
 describe('index.test.js', () => {
@@ -26,8 +25,8 @@ describe('index.test.js', () => {
 
   it('should pass ended', done => {
     const stream = fs.createReadStream(__filename);
-    const bh = new BlackHoleStream();
-    stream.pipe(bh).on('finish', () => {
+    stream.resume();
+    stream.on('end', () => {
       sendToWormhole(stream).then(done);
     });
   });

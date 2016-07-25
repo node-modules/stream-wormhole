@@ -1,7 +1,5 @@
 'use strict';
 
-const BlackHoleStream = require('black-hole-stream');
-
 module.exports = (stream, throwError) => {
   return new Promise((resolve, reject) => {
     if (stream._readableState && stream._readableState.ended) {
@@ -11,8 +9,7 @@ module.exports = (stream, throwError) => {
       return resolve();
     }
 
-    const blockhole = new BlackHoleStream();
-    stream.pipe(blockhole);
+    stream.resume();
 
     function cleanup() {
       stream.removeListener('end', onEnd);
