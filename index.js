@@ -2,14 +2,19 @@
 
 module.exports = (stream, throwError) => {
   return new Promise((resolve, reject) => {
+    if (typeof stream.resume !== 'function') {
+      return resolve();
+    }
+
+    // enable resume first
+    stream.resume();
+
     if (stream._readableState && stream._readableState.ended) {
       return resolve();
     }
     if (!stream.readable || stream.destroyed) {
       return resolve();
     }
-
-    stream.resume();
 
     function cleanup() {
       stream.removeListener('end', onEnd);

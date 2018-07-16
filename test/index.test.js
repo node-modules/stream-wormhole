@@ -34,13 +34,20 @@ describe('index.test.js', () => {
   it('should mock destroyed', () => {
     const stream = {
       destroyed: true,
+      resume() {},
     };
+    return sendToWormhole(stream);
+  });
+
+  it('should mock fake read stream', () => {
+    const stream = {};
     return sendToWormhole(stream);
   });
 
   it('should mock readable = false', () => {
     const stream = {
       readable: false,
+      resume() {},
     };
     return sendToWormhole(stream);
   });
