@@ -21,7 +21,7 @@ module.exports = (stream, throwError) => {
     function cleanup() {
       stream.removeListener('end', onEnd);
       stream.removeListener('close', onEnd);
-      stream.removeListener('close', onError);
+      stream.removeListener('error', onError);
     }
 
     function onEnd() {
