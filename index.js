@@ -6,6 +6,8 @@ module.exports = (stream, throwError) => {
       return resolve();
     }
 
+    // unpipe it
+    stream.unpipe && stream.unpipe();
     // enable resume first
     stream.resume();
 
