@@ -7,8 +7,8 @@
     "index.js"
   ],
   "scripts": {
-    "test": "npm run lint && mocha -t 5000 test/*.test.js -r thunk-mocha",
-    "test-cov": "istanbul cover _mocha -- -t 5000 test/*.test.js -r thunk-mocha",
+    "test": "npm run lint && mocha test/*.test.js -r thunk-mocha",
+    "test-cov": "istanbul cover _mocha -- test/*.test.js -r thunk-mocha",
     "lint": "eslint *.js test",
     "ci": "npm run lint && npm run test-cov"
   },
