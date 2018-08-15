@@ -1,4 +1,13 @@
 
+1.1.0 / 2018-08-15
+==================
+
+**features**
+  * [[`53ec1b2`](http://github.com/node-modules/stream-wormhole/commit/53ec1b21d0847c5c2d32391f60302cc9e96461f4)] - feat: support piped read stream (fengmk2 <<fengmk2@gmail.com>>)
+
+**fixes**
+  * [[`b2b1aaf`](http://github.com/node-modules/stream-wormhole/commit/b2b1aaf4dcd7741c13b76449ed9ef604a34e1f35)] - fix: should removeListener error handlers (fengmk2 <<fengmk2@gmail.com>>)
+
 1.0.4 / 2018-07-17
 ==================
 
