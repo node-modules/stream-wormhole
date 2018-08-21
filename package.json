@@ -7,7 +7,8 @@
     "index.js"
   ],
   "scripts": {
-    "test": "npm run lint && mocha test/*.test.js -r thunk-mocha",
+    "test-local": "mocha test/*.test.js -r thunk-mocha --t timeout=5000",
+    "test": "npm run lint && npm run test-local",
     "test-cov": "istanbul cover _mocha -- test/*.test.js -r thunk-mocha",
     "lint": "eslint *.js test",
     "ci": "npm run lint && npm run test-cov"

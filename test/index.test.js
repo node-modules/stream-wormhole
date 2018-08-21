@@ -42,6 +42,37 @@ describe('test/index.test.js', () => {
     }, 100);
   });
 
+  it('should work with read stream after listening readable', () => {
+    const stream = fs.createReadStream(bigtext);
+    let data;
+    stream.on('readable', () => {
+      if (!data) {
+        data = stream.read();
+        console.log('read data %d', data && data.length);
+      }
+    });
+    return sendToWormhole(stream).then(() => {
+      assert(!data);
+    });
+  });
+
+  it('should work with read stream after readable emitted', done => {
+    const stream = fs.createReadStream(bigtext);
+    let data;
+    stream.on('readable', () => {
+      if (!data) {
+        data = stream.read();
+        console.log('read data %d', data && data.length);
+      }
+    });
+    setTimeout(() => {
+      sendToWormhole(stream).then(() => {
+        assert(data);
+        done();
+      });
+    }, 500);
+  });
+
   it('should call multi times work with read stream after pipe', done => {
     let writeSize = 0;
     class PauseStream extends Writable {

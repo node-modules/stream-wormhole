@@ -6,10 +6,23 @@ module.exports = (stream, throwError) => {
       return resolve();
     }
 
-    // unpipe it
-    stream.unpipe && stream.unpipe();
-    // enable resume first
-    stream.resume();
+    if (stream.listenerCount && stream.listenerCount('readable') > 0) {
+      // https://npm.taobao.org/mirrors/node/latest/docs/api/stream.html#stream_readable_resume
+      // node 10.0.0: The resume() has no effect if there is a 'readable' event listening.
+      stream.removeAllListeners('readable');
+      // unpipe it
+      stream.unpipe && stream.unpipe();
+      // enable resume first
+      stream.resume();
+      // call resume again in nextTick
+      process.nextTick(() => stream.resume());
+    } else {
+      // unpipe it
+      stream.unpipe && stream.unpipe();
+      // enable resume first
+      stream.resume();
+    }
+
 
     if (stream._readableState && stream._readableState.ended) {
       return resolve();
