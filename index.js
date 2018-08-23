@@ -11,6 +11,14 @@ module.exports = (stream, throwError) => {
     // enable resume first
     stream.resume();
 
+    if (stream.listenerCount && stream.listenerCount('readable') > 0) {
+      // https://npm.taobao.org/mirrors/node/latest/docs/api/stream.html#stream_readable_resume
+      // node 10.0.0: The resume() has no effect if there is a 'readable' event listening.
+      stream.removeAllListeners('readable');
+      // call resume again in nextTick
+      process.nextTick(() => stream.resume());
+    }
+
     if (stream._readableState && stream._readableState.ended) {
       return resolve();
     }
