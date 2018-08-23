@@ -1,4 +1,10 @@
 
+1.1.1 / 2018-08-23
+==================
+
+**fixes**
+  * [[`c92e738`](http://github.com/node-modules/stream-wormhole/commit/c92e7384caf247529e9552b40ceaeac47c8bf92e)] - fix: should handle readable listeners (#7) (fengmk2 <<fengmk2@gmail.com>>)
+
 1.1.0 / 2018-08-15
 ==================
 
