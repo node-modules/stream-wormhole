@@ -1,3 +1,15 @@
+# Changelog
+
+## [2.0.0](https://github.com/node-modules/stream-wormhole/compare/v1.1.1...v2.0.0) (2023-09-16)
+
+
+### ⚠ BREAKING CHANGES
+
+* Drop Node.js < 16 support
+
+### Features
+
+* refactor with typescript ([#8](https://github.com/node-modules/stream-wormhole/issues/8)) ([bc61b2b](https://github.com/node-modules/stream-wormhole/commit/bc61b2b6c9354243e015642837166b753199bbe0))
 
 1.1.1 / 2018-08-23
 ==================
