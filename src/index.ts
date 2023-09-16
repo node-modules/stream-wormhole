@@ -58,6 +58,6 @@ export function sendToWormhole(stream: Readable, throwError = false) {
     stream.on('close', onEnd);
     stream.on('error', onError);
   });
-};
+}
 
 export default sendToWormhole;

@@ -24,9 +24,9 @@ describe('test/index.test.ts', () => {
   it('should work with read stream after pipe', done => {
     let writeSize = 0;
     class PauseStream extends Writable {
-      _write(/* chunk, encoding, callback */) {
-        console.log('PauseStream1 write buffer size: %d', arguments[0].length);
-        writeSize += arguments[0].length;
+      _write(...args: any[]) {
+        console.log('PauseStream1 write buffer size: %d', args[0].length);
+        writeSize += args[0].length;
         // do nothing
       }
     }
@@ -74,9 +74,9 @@ describe('test/index.test.ts', () => {
   it('should call multi times work with read stream after pipe', done => {
     let writeSize = 0;
     class PauseStream extends Writable {
-      _write(/* chunk, encoding, callback */) {
-        console.log('PauseStream2 write buffer size: %d', arguments[0].length);
-        writeSize += arguments[0].length;
+      _write(...args: any[]) {
+        console.log('PauseStream2 write buffer size: %d', args[0].length);
+        writeSize += args[0].length;
         // do nothing
       }
     }
@@ -118,7 +118,9 @@ describe('test/index.test.ts', () => {
   it('should mock destroyed', () => {
     const stream = {
       destroyed: true,
-      resume() {},
+      resume() {
+        // ignore
+      },
     };
     return sendToWormhole(stream as any);
   });
@@ -131,7 +133,9 @@ describe('test/index.test.ts', () => {
   it('should mock readable = false', () => {
     const stream = {
       readable: false,
-      resume() {},
+      resume() {
+        // ignore
+      },
     };
     return sendToWormhole(stream as any);
   });
