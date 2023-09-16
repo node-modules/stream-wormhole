@@ -29,7 +29,7 @@ export function sendToWormhole(stream: Readable, throwError = false) {
     }
 
     const readableState = Reflect.get(stream, READABLE_STATE_KEY);
-    if (stream.readableEnded || readableState?.ended) {
+    if (readableState?.ended) {
       return resolve();
     }
 

@@ -2,7 +2,8 @@ import { strict as assert } from 'node:assert';
 import path from 'node:path';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { Writable } from 'node:stream';
+import { Writable, PassThrough } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
 import wormhole from '../src/index.js';
 import { sendToWormhole } from '../src/index.js';
 
@@ -12,6 +13,12 @@ describe('test/index.test.ts', () => {
   it('should work with read stream', () => {
     const stream = fs.createReadStream(bigtext);
     return wormhole(stream);
+  });
+
+  it('should work with readableEnded', async () => {
+    const stream = fs.createReadStream(bigtext);
+    await pipeline(stream, new PassThrough().resume());
+    await wormhole(stream);
   });
 
   it('should call multi times work', async () => {
