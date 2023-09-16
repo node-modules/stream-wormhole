@@ -1,6 +1,7 @@
 # stream-wormhole
 
 [![NPM version][npm-image]][npm-url]
+[![CI](https://github.com/node-modules/stream-wormhole/actions/workflows/nodejs.yml/badge.svg)](https://github.com/node-modules/stream-wormhole/actions/workflows/nodejs.yml)
 [![Test coverage][codecov-image]][codecov-url]
 [![npm download][download-image]][download-url]
 
@@ -11,7 +12,7 @@
 [download-image]: https://img.shields.io/npm/dm/stream-wormhole.svg?style=flat-square
 [download-url]: https://npmjs.org/package/stream-wormhole
 
-Pipe ReadStream to a wormhole.
+Pipe `ReadStream` / `Readable` to a wormhole.
 
 ## Usage
 
