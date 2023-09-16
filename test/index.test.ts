@@ -1,34 +1,39 @@
-'use strict';
+import { strict as assert } from 'node:assert';
+import path from 'node:path';
+import fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { Writable, PassThrough } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
+import wormhole from '../src/index.js';
+import { sendToWormhole } from '../src/index.js';
 
-const assert = require('assert');
-const path = require('path');
-const fs = require('fs');
-const Writable = require('stream').Writable;
-const sendToWormhole = require('..');
+describe('test/index.test.ts', () => {
+  const bigtext = path.join(path.dirname(fileURLToPath(import.meta.url)), 'fixtures/big.txt');
 
-const bigtext = path.join(__dirname, 'fixtures/big.txt');
-
-describe('test/index.test.js', () => {
   it('should work with read stream', () => {
     const stream = fs.createReadStream(bigtext);
-    return sendToWormhole(stream);
+    return wormhole(stream);
   });
 
-  it('should call multi times work', () => {
+  it('should work with readableEnded', async () => {
     const stream = fs.createReadStream(bigtext);
-    return sendToWormhole(stream).then(() => {
-      return sendToWormhole(stream).then(() => {
-        return sendToWormhole(stream);
-      });
-    });
+    await pipeline(stream, new PassThrough().resume());
+    await wormhole(stream);
+  });
+
+  it('should call multi times work', async () => {
+    const stream = fs.createReadStream(bigtext);
+    await sendToWormhole(stream);
+    await sendToWormhole(stream);
+    return await sendToWormhole(stream);
   });
 
   it('should work with read stream after pipe', done => {
     let writeSize = 0;
     class PauseStream extends Writable {
-      _write(/* chunk, encoding, callback */) {
-        console.log('PauseStream1 write buffer size: %d', arguments[0].length);
-        writeSize += arguments[0].length;
+      _write(...args: any[]) {
+        console.log('PauseStream1 write buffer size: %d', args[0].length);
+        writeSize += args[0].length;
         // do nothing
       }
     }
@@ -44,7 +49,7 @@ describe('test/index.test.js', () => {
 
   it('should work with read stream after listening readable', () => {
     const stream = fs.createReadStream(bigtext);
-    let data;
+    let data: any;
     stream.on('readable', () => {
       if (!data) {
         data = stream.read();
@@ -58,7 +63,7 @@ describe('test/index.test.js', () => {
 
   it('should work with read stream after readable emitted', done => {
     const stream = fs.createReadStream(bigtext);
-    let data;
+    let data: any;
     stream.on('readable', () => {
       if (!data) {
         data = stream.read();
@@ -76,9 +81,9 @@ describe('test/index.test.js', () => {
   it('should call multi times work with read stream after pipe', done => {
     let writeSize = 0;
     class PauseStream extends Writable {
-      _write(/* chunk, encoding, callback */) {
-        console.log('PauseStream2 write buffer size: %d', arguments[0].length);
-        writeSize += arguments[0].length;
+      _write(...args: any[]) {
+        console.log('PauseStream2 write buffer size: %d', args[0].length);
+        writeSize += args[0].length;
         // do nothing
       }
     }
@@ -120,37 +125,41 @@ describe('test/index.test.js', () => {
   it('should mock destroyed', () => {
     const stream = {
       destroyed: true,
-      resume() {},
+      resume() {
+        // ignore
+      },
     };
-    return sendToWormhole(stream);
+    return sendToWormhole(stream as any);
   });
 
   it('should mock fake read stream', () => {
     const stream = {};
-    return sendToWormhole(stream);
+    return sendToWormhole(stream as any);
   });
 
   it('should mock readable = false', () => {
     const stream = {
       readable: false,
-      resume() {},
+      resume() {
+        // ignore
+      },
     };
-    return sendToWormhole(stream);
+    return sendToWormhole(stream as any);
   });
 
-  it('should work on co', function* () {
+  it('should work on Promise', async () => {
     const stream = fs.createReadStream(bigtext);
-    yield sendToWormhole(stream);
+    await sendToWormhole(stream);
     assert.equal(stream.readable, false);
     assert(stream.destroyed);
     // again should work
-    yield sendToWormhole(stream);
+    await sendToWormhole(stream);
     assert.equal(stream.readable, false);
     assert(stream.destroyed);
-    yield sendToWormhole(stream);
+    await sendToWormhole(stream);
     assert.equal(stream.readable, false);
     assert(stream.destroyed);
-    yield sendToWormhole(stream);
+    await sendToWormhole(stream);
     assert.equal(stream.readable, false);
     assert(stream.destroyed);
   });

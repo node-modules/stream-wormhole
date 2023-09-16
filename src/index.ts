@@ -1,7 +1,9 @@
-'use strict';
+import { Readable } from 'node:stream';
 
-module.exports = (stream, throwError) => {
-  return new Promise((resolve, reject) => {
+const READABLE_STATE_KEY = '_readableState';
+
+export function sendToWormhole(stream: Readable, throwError = false) {
+  return new Promise<void>((resolve, reject) => {
     if (typeof stream.resume !== 'function') {
       return resolve();
     }
@@ -19,10 +21,15 @@ module.exports = (stream, throwError) => {
       process.nextTick(() => stream.resume());
     }
 
-    if (stream._readableState && stream._readableState.ended) {
+    if (!stream.readable || stream.destroyed) {
       return resolve();
     }
-    if (!stream.readable || stream.destroyed) {
+    if (stream.closed || stream.readableEnded) {
+      return resolve();
+    }
+
+    const readableState = Reflect.get(stream, READABLE_STATE_KEY);
+    if (readableState?.ended) {
       return resolve();
     }
 
@@ -37,7 +44,7 @@ module.exports = (stream, throwError) => {
       resolve();
     }
 
-    function onError(err) {
+    function onError(err: Error) {
       cleanup();
       // don't throw error by default
       if (throwError) {
@@ -51,4 +58,6 @@ module.exports = (stream, throwError) => {
     stream.on('close', onEnd);
     stream.on('error', onError);
   });
-};
+}
+
+export default sendToWormhole;
