@@ -2,7 +2,6 @@
   "name": "stream-wormhole",
   "version": "2.0.0",
   "description": "Pipe ReadStream to a wormhole",
-  "typings": "./dist/esm/index.d.ts",
   "files": [
     "dist",
     "src"
@@ -32,7 +31,7 @@
     "lint": "eslint src test",
     "ci": "npm run lint && egg-bin cov",
     "contributor": "git-contributor",
-    "prepublishOnly": "tshy"
+    "prepublishOnly": "tshy && tshy-after"
   },
   "dependencies": {},
   "devDependencies": {
@@ -44,6 +43,7 @@
     "eslint-config-egg": "^12.3.0",
     "git-contributor": "^2.1.5",
     "tshy": "^1.0.0",
+    "tshy-after": "^1.0.0",
     "typescript": "^5.2.2"
   },
   "homepage": "https://github.com/node-modules/stream-wormhole",
@@ -66,5 +66,6 @@
     "version": "16, 18, 20"
   },
   "author": "fengmk2",
-  "license": "MIT"
+  "license": "MIT",
+  "types": "./dist/commonjs/index.d.ts"
 }
