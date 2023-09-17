@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.1](https://github.com/node-modules/stream-wormhole/compare/v2.0.0...v2.0.1) (2023-09-17)
+
+
+### Bug Fixes
+
+* use types instead of typings ([30b24a5](https://github.com/node-modules/stream-wormhole/commit/30b24a5b59132ef8e769ce492a68fdee26cb4902))
+
 ## [2.0.0](https://github.com/node-modules/stream-wormhole/compare/v1.1.1...v2.0.0) (2023-09-16)
 
 
